@@ -1,9 +1,11 @@
 #include <ros/ros.h>
 #include <std_msgs/Int8.h>
+#include <geometry_msgs/Twist.h>
 
 ros::Subscriber sub_Regnestykke_v1;
 ros::Subscriber sub_Regnestykke_v2;
 ros::Subscriber sub_Regnestykke_op1;
+ros::Publisher cmd_vel_pub;
 
 int v1, v2, op1, a = 1;
 
@@ -34,6 +36,80 @@ int main(int argc, char **argv)
   sub_Regnestykke_op1 = n.subscribe("Regnestykke_op1", 10, RegnestykkeCallback_op1);
 
   while(a != 0 && ros::ok)
+  {
+    if (op1 == '+')
+    {
+      for (int i = 0; i < 1; i++)
+      {
+        geometry_msgs::Twist cmd_vel_message;
+        cmd_vel_message.angular.z = 0.0;
+        cmd_vel_message.linear.x = v1;
+        ros::Duration(1);
+      }
+
+      for (int i = 0; i < 1; i++)
+      {
+        geometry_msgs::Twist cmd_vel_message;
+        cmd_vel_message.angular.z = 0.0;
+        cmd_vel_message.linear.x = v2;
+        ros::Duration(1);
+      }
+    }
+    
+    if (op1 == '-')
+    {
+      for (int i = 0; i < 1; i++)
+      {
+        geometry_msgs::Twist cmd_vel_message;
+        cmd_vel_message.angular.z = 0.0;
+        cmd_vel_message.linear.x = v1;
+        ros::Duration(1);
+      }
+
+      for (int i = 0; i < 1; i++)
+      {
+        geometry_msgs::Twist cmd_vel_message;
+        cmd_vel_message.angular.z = 0.0;
+        cmd_vel_message.linear.x = -v2;
+        ros::Duration(1);
+      }
+    }
+
+    if (op1 == '*')
+    {
+      for (int i = 0; i < v2; i++)
+      {
+        geometry_msgs::Twist cmd_vel_message;
+        cmd_vel_message.angular.z = 0.0;
+        cmd_vel_message.linear.x = v1;
+        ros::Duration(1);
+      }
+    }
+
+    if (op1 == '/')
+    {
+      for (int i = 0; i < 1; i++)
+      {
+        geometry_msgs::Twist cmd_vel_message;
+        cmd_vel_message.angular.z = 0.0;
+        cmd_vel_message.linear.x = v1;
+        ros::Duration(1);
+      }
+
+      for (int i = 0; i < 1; i++)
+      {
+        geometry_msgs::Twist cmd_vel_message;
+        cmd_vel_message.angular.z = 0.0;
+        cmd_vel_message.linear.x = (-1) * (v1 - v1 / v2);
+        ros::Duration(1);
+      }
+    }
+
+
+    ros::spinOnce;
+    
+    std::cin >> a;
+  }
 
   ros::spin();
 
