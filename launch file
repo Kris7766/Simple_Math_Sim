@@ -1,0 +1,8 @@
+<launch>
+    <node name="lommeregner" pkg="mini_project_2020" type="fil navn" />
+    <node name="skildpade 1" pkg="mini_project_2020" type="fil navn" />
+    <node name="skildpade 2" pkg="mini_project_2020" type="fil navn" />
+</launch>
+
+//husk at kalde filen for .launch
+// og husk ikke at kalde din type .cpp i din launch file
