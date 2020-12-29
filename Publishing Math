@@ -92,7 +92,7 @@ int main(int argc, char **argv)
 
         msg_res.data = mat;
         ROS_INFO("%d", msg_res.data);
-        pub_Regnestykke.publish(msg_res);
+        pub_Resultat.publish(msg_res);
 
         ros::spinOnce();
 
