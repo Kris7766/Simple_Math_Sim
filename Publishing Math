@@ -11,9 +11,10 @@ ros::Publisher pub_Resultat;
 int v1, v2, op1, mat, a = 1;
 //bool a = true;
 
-//String
+//msg navne
 std_msgs::String msg;
 std::stringstream ss1, ss2;
+std_msgs::Int8 msg_v1, msg_v2, msg_op1, msg_res;
 
 //main function
 int main(int argc, char **argv)
@@ -22,8 +23,6 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
     pub_Regnestykke = n.advertise<std_msgs::String>("Regnestykke", 1000);
     pub_Resultat = n.advertise<std_msgs::String>("Resultat", 1000);
-
-    std_msgs::Int8 msg_v1, msg_v2, msg_op1, msg_res;
 
     while (a != 0 && ros::ok())
     {
