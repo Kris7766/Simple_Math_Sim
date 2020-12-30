@@ -6,10 +6,13 @@
 ros::Subscriber sub_Regnestykke_v1;
 ros::Subscriber sub_Regnestykke_v2;
 ros::Subscriber sub_Regnestykke_op1;
+ros::Publisher pub_Resultat;
 ros::Publisher cmd_vel_pub;
 
-int v1, v2, again = 1, mat, opera;
+int v1, v2, again = 1, mat;
 char op1;
+
+std_msgs::Int8 msg_res;
 
 void RegnestykkeCallback_v1(const std_msgs::Int8::ConstPtr& msg)
 {
@@ -122,6 +125,10 @@ void RegnestykkeCallback_op1(const std_msgs::Char::ConstPtr& msg)
       ros::Duration(1).sleep();
     }
   }
+
+  msg_res.data = mat;
+  ROS_INFO("%i", msg_res.data);
+  pub_Resultat.publish(msg_res);
 }
 
 int main(int argc, char **argv)
@@ -131,6 +138,7 @@ int main(int argc, char **argv)
   sub_Regnestykke_v1 = n.subscribe("Regnestykke_v1", 10, RegnestykkeCallback_v1);
   sub_Regnestykke_v2 = n.subscribe("Regnestykke_v2", 10, RegnestykkeCallback_v2);
   sub_Regnestykke_op1 = n.subscribe("Regnestykke_op1", 10, RegnestykkeCallback_op1);
+  pub_Resultat = n.advertise<std_msgs::Int8>("Resultat", 10);
   cmd_vel_pub = n.advertise<geometry_msgs::Twist>("/turtle1/cmd_vel", 10);
 
   ros::spin();
