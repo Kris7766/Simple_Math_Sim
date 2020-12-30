@@ -1,5 +1,6 @@
 #include <ros/ros.h>
 #include <std_msgs/Int8.h>
+#include <std_msgs/Char.h>
 #include <geometry_msgs/Twist.h>
 
 ros::Subscriber sub_Regnestykke_v1;
@@ -7,7 +8,8 @@ ros::Subscriber sub_Regnestykke_v2;
 ros::Subscriber sub_Regnestykke_op1;
 ros::Publisher cmd_vel_pub;
 
-int v1, v2, op1, a = 1;
+int v1, v2, again = 1;
+char op1;
 
 void RegnestykkeCallback_v1(const std_msgs::Int8::ConstPtr& msg)
 {
@@ -21,7 +23,7 @@ void RegnestykkeCallback_v2(const std_msgs::Int8::ConstPtr& msg)
   v2 = msg->data;
 }
 
-void RegnestykkeCallback_op1(const std_msgs::Int8::ConstPtr& msg)
+void RegnestykkeCallback_op1(const std_msgs::Char::ConstPtr& msg)
 {
   ROS_INFO("I heard: [%i]", msg->data);
   op1 = msg->data;
@@ -33,11 +35,11 @@ int main(int argc, char **argv)
 
   ros::init(argc, argv, "Padde1");
   ros::NodeHandle n;
-  sub_Regnestykke_v1 = n.subscribe("Regnestykke_v1", 10, RegnestykkeCallback_v1);
-  sub_Regnestykke_v2 = n.subscribe("Regnestykke_v2", 10, RegnestykkeCallback_v2);
-  sub_Regnestykke_op1 = n.subscribe("Regnestykke_op1", 10, RegnestykkeCallback_op1);
+  sub_Regnestykke_v1 = n.subscribe("Regnestykke_v1", 1, RegnestykkeCallback_v1);
+  sub_Regnestykke_v2 = n.subscribe("Regnestykke_v2", 1, RegnestykkeCallback_v2);
+  sub_Regnestykke_op1 = n.subscribe("Regnestykke_op1", 1, RegnestykkeCallback_op1);
 
-  while (a != 0 && ros::ok)
+  while (again != 0 && ros::ok)
   {
     if (op1 == '+')
     {
@@ -94,8 +96,6 @@ int main(int argc, char **argv)
           ros::Duration(1);
         }
       }
-      
-      
     }
 
     if (op1 == '/')
@@ -120,11 +120,9 @@ int main(int argc, char **argv)
       }
     }
 
-
-
     ros::spinOnce;
     
-    std::cin >> a;
+    std::cin >> again;
   }
 
   ros::spin();
