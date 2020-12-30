@@ -38,6 +38,7 @@ int main(int argc, char **argv)
   sub_Regnestykke_v1 = n.subscribe("Regnestykke_v1", 1, RegnestykkeCallback_v1);
   sub_Regnestykke_v2 = n.subscribe("Regnestykke_v2", 1, RegnestykkeCallback_v2);
   sub_Regnestykke_op1 = n.subscribe("Regnestykke_op1", 1, RegnestykkeCallback_op1);
+  cmd_vel_pub = n.advertise<geometry_msgs::Twist>("turtle1/cmd_vel", 1);
 
   while (again != 0 && ros::ok)
   {
