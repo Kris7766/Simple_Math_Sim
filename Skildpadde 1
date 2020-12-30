@@ -8,123 +8,130 @@ ros::Subscriber sub_Regnestykke_v2;
 ros::Subscriber sub_Regnestykke_op1;
 ros::Publisher cmd_vel_pub;
 
-int v1, v2, again = 1;
+int v1, v2, again = 1, mat, opera;
 char op1;
 
 void RegnestykkeCallback_v1(const std_msgs::Int8::ConstPtr& msg)
 {
-  ROS_INFO("I heard: [%i]", msg->data);
+  //ROS_INFO("I heard: [%i]", msg->data);
   v1 = msg->data;
 }
 
 void RegnestykkeCallback_v2(const std_msgs::Int8::ConstPtr& msg)
 {
-  ROS_INFO("I heard: [%i]", msg->data);
+  //ROS_INFO("I heard: [%i]", msg->data);
   v2 = msg->data;
 }
 
 void RegnestykkeCallback_op1(const std_msgs::Char::ConstPtr& msg)
 {
-  ROS_INFO("I heard: [%i]", msg->data);
+  //ROS_INFO("I heard: [%i]", msg->data);
   op1 = msg->data;
+
+  if (op1 == '+')
+  {
+    std::cout << v1 << " + " << v2 << " = ";
+    mat = v1 + v2;
+    std::cout << mat << std::endl;
+    
+    for (int i = 0; i < v1; i++)
+    {
+      geometry_msgs::Twist cmd_vel_message;
+      cmd_vel_message.angular.z = 0.0;
+      cmd_vel_message.linear.x = 1.0;
+      cmd_vel_pub.publish(cmd_vel_message);
+      ros::Duration(1).sleep();
+    }
+
+    for (int i = 0; i < v2; i++)
+    {
+      geometry_msgs::Twist cmd_vel_message;
+      cmd_vel_message.angular.z = 0.0;
+      cmd_vel_message.linear.x = 1.0;
+      cmd_vel_pub.publish(cmd_vel_message);
+      ros::Duration(1).sleep();
+    }
+  }
+  
+  if (op1 == '-')
+  {
+    std::cout << v1 << " - " << v2 << " = ";
+    mat = v1 - v2;
+    std::cout << mat << std::endl;
+
+    for (int i = 0; i < v1; i++)
+    {
+      geometry_msgs::Twist cmd_vel_message;
+      cmd_vel_message.angular.z = 0.0;
+      cmd_vel_message.linear.x = 1.0;
+      cmd_vel_pub.publish(cmd_vel_message);
+      ros::Duration(1).sleep();
+    }
+
+    for (int i = 0; i < v2; i++)
+    {
+      geometry_msgs::Twist cmd_vel_message;
+      cmd_vel_message.angular.z = 0.0;
+      cmd_vel_message.linear.x = -1.0;
+      cmd_vel_pub.publish(cmd_vel_message);
+      ros::Duration(1).sleep();
+    }
+  }
+
+  if (op1 == '*')
+  {
+    std::cout << v1 << " * " << v2 << " = ";
+    mat = v1 * v2;
+    std::cout << mat << std::endl;
+
+    for (int i = 0; i < v2; i++)
+    {
+      for (int i = 0; i < v1; i++)
+      {
+        geometry_msgs::Twist cmd_vel_message;
+        cmd_vel_message.angular.z = 0.0;
+        cmd_vel_message.linear.x = 1.0;
+        cmd_vel_pub.publish(cmd_vel_message);
+        ros::Duration(1).sleep();
+      }
+    }
+  }
+
+  if (op1 == '/')
+  {
+    std::cout << v1 << " / " << v2 << " = ";
+    mat = v1 / v2;
+    std::cout << mat << std::endl;
+    
+    int div = v1 - (v1 - v1 / v2);
+    for (int i = 0; i < v1; i++)
+    {
+      geometry_msgs::Twist cmd_vel_message;
+      cmd_vel_message.angular.z = 0.0;
+      cmd_vel_message.linear.x = 1.0;
+      cmd_vel_pub.publish(cmd_vel_message);
+      ros::Duration(1).sleep();
+    }
+
+    for (int i = 0; i < div; i++)
+    {
+      geometry_msgs::Twist cmd_vel_message;
+      cmd_vel_message.angular.z = 0.0;
+      cmd_vel_message.linear.x = -1.0;
+      cmd_vel_pub.publish(cmd_vel_message);
+      ros::Duration(1).sleep();
+    }
+  }
 }
 
 int main(int argc, char **argv)
 {
-  ros::Duration(3);
-
   ros::init(argc, argv, "Padde1");
   ros::NodeHandle n;
-  sub_Regnestykke_v1 = n.subscribe("Regnestykke_v1", 1, RegnestykkeCallback_v1);
-  sub_Regnestykke_v2 = n.subscribe("Regnestykke_v2", 1, RegnestykkeCallback_v2);
-  sub_Regnestykke_op1 = n.subscribe("Regnestykke_op1", 1, RegnestykkeCallback_op1);
-  cmd_vel_pub = n.advertise<geometry_msgs::Twist>("turtle1/cmd_vel", 1);
-
-  while (again != 0 && ros::ok)
-  {
-    if (op1 == '+')
-    {
-      for (int i = 0; i < v1; i++)
-      {
-        geometry_msgs::Twist cmd_vel_message;
-        cmd_vel_message.angular.z = 0.0;
-        cmd_vel_message.linear.x = 1.0;
-        cmd_vel_pub.publish(cmd_vel_message);
-        ros::Duration(1);
-      }
-
-      for (int i = 0; i < v2; i++)
-      {
-        geometry_msgs::Twist cmd_vel_message;
-        cmd_vel_message.angular.z = 0.0;
-        cmd_vel_message.linear.x = 1.0;
-        cmd_vel_pub.publish(cmd_vel_message);
-        ros::Duration(1);
-      }
-    }
-    
-    if (op1 == '-')
-    {
-      for (int i = 0; i < v1; i++)
-      {
-        geometry_msgs::Twist cmd_vel_message;
-        cmd_vel_message.angular.z = 0.0;
-        cmd_vel_message.linear.x = 1.0;
-        cmd_vel_pub.publish(cmd_vel_message);
-        ros::Duration(1);
-      }
-
-      for (int i = 0; i < v2; i++)
-      {
-        geometry_msgs::Twist cmd_vel_message;
-        cmd_vel_message.angular.z = 0.0;
-        cmd_vel_message.linear.x = -1.0;
-        cmd_vel_pub.publish(cmd_vel_message);
-        ros::Duration(1);
-      }
-    }
-
-    if (op1 == '*')
-    {
-      for (int i = 0; i < v2; i++)
-      {
-        for (int i = 0; i < v1; i++)
-        {
-          geometry_msgs::Twist cmd_vel_message;
-          cmd_vel_message.angular.z = 0.0;
-          cmd_vel_message.linear.x = 1.0;
-          cmd_vel_pub.publish(cmd_vel_message);
-          ros::Duration(1);
-        }
-      }
-    }
-
-    if (op1 == '/')
-    {
-      int div = v1 - (v1 - v1 / v2);
-      for (int i = 0; i < v1; i++)
-      {
-        geometry_msgs::Twist cmd_vel_message;
-        cmd_vel_message.angular.z = 0.0;
-        cmd_vel_message.linear.x = 1.0;
-        cmd_vel_pub.publish(cmd_vel_message);
-        ros::Duration(1);
-      }
-
-      for (int i = 0; i < div; i++)
-      {
-        geometry_msgs::Twist cmd_vel_message;
-        cmd_vel_message.angular.z = 0.0;
-        cmd_vel_message.linear.x = -1.0;
-        cmd_vel_pub.publish(cmd_vel_message);
-        ros::Duration(1);
-      }
-    }
-
-    ros::spinOnce;
-    
-    std::cin >> again;
-  }
+  sub_Regnestykke_v1 = n.subscribe("Regnestykke_v1", 10, RegnestykkeCallback_v1);
+  sub_Regnestykke_v2 = n.subscribe("Regnestykke_v2", 10, RegnestykkeCallback_v2);
+  sub_Regnestykke_op1 = n.subscribe("Regnestykke_op1", 10, RegnestykkeCallback_op1);
+  cmd_vel_pub = n.advertise<geometry_msgs::Twist>("/turtle1/cmd_vel", 10);
 
   ros::spin();
 
