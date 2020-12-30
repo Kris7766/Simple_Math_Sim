@@ -7,14 +7,13 @@
 ros::Publisher pub_Regnestykke_v1;
 ros::Publisher pub_Regnestykke_v2;
 ros::Publisher pub_Regnestykke_op1;
-ros::Publisher pub_Resultat;
 
 //Variabler.
-int v1, v2, mat, a = 1, opera;
+int v1, v2, a = 1, opera;
 char op1;
 
 //8bit integer msg navne.
-std_msgs::Int8 msg_v1, msg_v2, msg_res;
+std_msgs::Int8 msg_v1, msg_v2;
 std_msgs::Char msg_op1;
 
 //main function.
@@ -25,11 +24,10 @@ int main(int argc, char **argv)
     pub_Regnestykke_v1 = n.advertise<std_msgs::Int8>("Regnestykke_v1", 10);
     pub_Regnestykke_v2 = n.advertise<std_msgs::Int8>("Regnestykke_v2", 10);
     pub_Regnestykke_op1 = n.advertise<std_msgs::Char>("Regnestykke_op1", 10);
-    pub_Resultat = n.advertise<std_msgs::Int8>("Resultat", 10);
 
     while (a != 0 && ros::ok())
     {
-        std::cout << "Indtast første værdi her: ";
+        std::cout << "\nIndtast første værdi her: ";
         std::cin >> v1;
         std::cout << "\nVælg operation; 1 = +   2 = -   3 = *   4 = / ";
         std::cin >> opera;
@@ -68,13 +66,16 @@ int main(int argc, char **argv)
         msg_op1.data = op1;
         ROS_INFO("%i", msg_op1.data);
         pub_Regnestykke_op1.publish(msg_op1);
-        
-        msg_res.data = mat;
-        ROS_INFO("%i", msg_res.data);
-        pub_Resultat.publish(msg_res);
 
+        //gør ikke noget, men er god at have hvis man vil tilføje Callback funktioner senere
+        //så ville de allerede have en måde at blive tilgået.
         ros::spinOnce();
+
+        //Gør at de programmerne programmer bliver færdige før denne genstarter.
         ros::Duration(1).sleep();
+
+        std::cout << "\nFor at stoppe indtast 0 og alt andet for at fortsætte: ";
+        std::cin >> a;
     }
 
     return 0;
