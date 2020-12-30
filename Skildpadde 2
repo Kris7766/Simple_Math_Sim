@@ -40,7 +40,7 @@ void ResultatCallback(const std_msgs::Int8::ConstPtr& msg)
 int main(int argc, char **argv)
 {
   //Makes sure the turtlesim node has enough time before we add the extra turtle.
-  ros::Duration(3).sleep();
+  sleep(3);
   //adds the extra turtle.
   system("rosservice call /spawn 5.544445 4.544445 0 turtle2");
 
