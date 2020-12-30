@@ -9,7 +9,6 @@ int mat;
 
 void ResultatCallback(const std_msgs::Int8::ConstPtr& msg)
 {
-  //ROS_INFO("I heard2: [%i]", msg->data);
   mat = msg->data;
   
   if (mat > 0)
@@ -39,13 +38,13 @@ void ResultatCallback(const std_msgs::Int8::ConstPtr& msg)
 
 int main(int argc, char **argv)
 {
-  //Makes sure the turtlesim node has enough time before we add the extra turtle.
-  sleep(3);
-  //adds the extra turtle.
-  system("rosservice call /spawn 5.544445 4.544445 0 turtle2");
-
   ros::init(argc, argv, "padde2");
   ros::NodeHandle n;
+  
+  //Makes sure the turtlesim node has enough time before we add the extra turtle.
+  ros::Duration(3).sleep();
+  //adds the extra turtle.
+  system("rosservice call /spawn 5.544445 4.544445 0 turtle2");
 
   //Tells the subscriber where to subscribe from, how much and the Callback function to initiate.
   sub_Resultat = n.subscribe("Resultat", 10, ResultatCallback);
